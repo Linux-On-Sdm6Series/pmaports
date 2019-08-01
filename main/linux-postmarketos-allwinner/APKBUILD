@@ -4,7 +4,7 @@ _config="config-${_flavor}.${CARCH}"
 pkgname=linux-${_flavor}
 
 pkgver=5.3.0_git20190726
-pkgrel=1
+pkgrel=2
 
 arch="aarch64"
 pkgdesc="Kernel fork with PinePhone Don't be evil patches"
@@ -14,13 +14,15 @@ makedepends="devicepkg-dev perl sed installkernel bash gmp-dev bc linux-headers 
 options="!strip !check !tracedeps"
 install=
 _commit="577c793d924a0455b2b555d468cf50f97985b6f6"
+_ref_wireguard="0.0.20190702"
 source="
 	${pkgname}-${_commit}.tar.gz::https://gitlab.com/pine64-org/linux/-/archive/${_commit}/linux-${_commit}.tar.gz
+	wireguard-${_ref_wireguard}.tar.xz::https://git.zx2c4.com/WireGuard/snapshot/WireGuard-${_ref_wireguard}.tar.xz
 	config-${_flavor}.aarch64
 	touch-dts.patch
 "
 
-subpackages=""
+subpackages="$pkgname-wireguard"
 
 license="GPL2"
 _abi_release=$_pkgver
@@ -40,6 +42,9 @@ builddir="$srcdir/linux-${_commit}"
 prepare() {
 	default_prepare
 
+	# Add WireGuard into the kernel tree
+	"$srcdir"/WireGuard-${_ref_wireguard}/contrib/kernel-tree/jury-rig.sh "$builddir"
+
 	REPLACE_GCCH=0 \
 		downstreamkernel_prepare "$srcdir" "$builddir" "$_config" "$_carch" "$HOSTCC"
 }
@@ -49,6 +54,7 @@ build() {
 	make ARCH="$_carch" CC="${CC:-gcc}" \
 		KBUILD_BUILD_VERSION="$((pkgrel + 1 ))-${_flavor}" \
 		CFLAGS_MODULE=-fno-pic
+
 }
 
 package() {
@@ -83,6 +89,17 @@ package() {
 		INSTALL_DTBS_PATH="$pkgdir/usr/share/dtb"
 }
 
+wireguard() {
+	pkgdesc="$pkgname wireguard module"
+	install_if="$pkgname wireguard-tools"
+
+	_kernelver=$(basename $pkgdir/lib/modules/*)
+	install -d "$subpkgdir"/lib/modules/${_kernelver}/kernel/net/wireguard
+	mv "$pkgdir"/lib/modules/${_kernelver}/kernel/net/wireguard/* \
+		"$subpkgdir"/lib/modules/${_kernelver}/kernel/net/wireguard
+}
+
 sha512sums="88aab0956b4bb3a240b40448b46b0edbfefd038759cd4c00fe89357e666e5be054ad3cd9455de2fc5670bd656c9414bbc66580723c8532a744d06ab2a4edbac2  linux-postmarketos-allwinner-577c793d924a0455b2b555d468cf50f97985b6f6.tar.gz
-9d6034e54fc838001fb53b3b3f03bba8de68c93f1e6cfbfa7e89c0b834aebded3baaa37b019d1bb1b3b64cbb9fe3f9aabdfd05299af27d3a44bcfdb1f70b78fd  config-postmarketos-allwinner.aarch64
+8b92b51506cd3f8e9939378b86f23678e08e8501432decd0abf6a9d4e3dfe4742b6f1cb75e06407f5816778b3dd90849a5da83252ab882392ec1905dfb997501  wireguard-0.0.20190702.tar.xz
+3cfc2d4ca911d1ddf1baee54dfa24af29bf0fee6f4e95cce60ccaff3dda35f5a4bf743b47ac6983f2565765eaa601b13af8ddd0d00f915baabb2a6d605db41f5  config-postmarketos-allwinner.aarch64
 5f2285e4eb262a9429c73599871c3fecbb858a388774bc7cba7631987ed1dc4a14cd7606e8fefc655c5128851fc853132f0a081e3d710c9266739af92f4d37e8  touch-dts.patch"
