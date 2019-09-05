@@ -1,9 +1,9 @@
 # Contributor: Bart Ribbers <bribbers@disroot.org>
 # Maintainer: Bart Ribbers <bribbers@disroot.org>
 pkgname=phoc
-pkgver=0_git20190716
+pkgver=0_git20190826
 pkgrel=0
-_commit="a8a1a660911980e4a453fa75ca821f599cf4f158"
+_commit="088114410a02157dd9f751d3122beda778be74e9"
 pkgdesc="wlroots based Phone compositor for the Phosh shell"
 arch="all"
 url="https://source.puri.sm/Librem5/phoc"
@@ -24,4 +24,4 @@ check() {
 package() {
 	DESTDIR="$pkgdir/" ninja -C _build install
 }
-sha512sums="7b37b21f6927e0562527650c9593939bf2831cfd9c1d00129e10338587c5ff1894a794469ebe12b242f22b1af690bdcc817ba9ffe99f8be2a274695b24f4cde9  phoc-a8a1a660911980e4a453fa75ca821f599cf4f158.tar.gz"
+sha512sums="2efedc0b9c50d537da9818d4dc97807d06ebe31cd087e91f299280f1ffda9f619feb086f550fc2d8317f451909fd32cf1404dbd51c5fd0fa10935a138b5fe02f  phoc-088114410a02157dd9f751d3122beda778be74e9.tar.gz"
