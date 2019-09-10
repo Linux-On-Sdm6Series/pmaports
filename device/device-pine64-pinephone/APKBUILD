@@ -2,7 +2,7 @@
 pkgname="device-pine64-pinephone"
 pkgdesc="PINE64 PinePhone"
 pkgver=0.1
-pkgrel=11
+pkgrel=12
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
@@ -21,6 +21,7 @@ source="
 	weston.ini
 	xorg.conf
 	hwtest.ini
+	eg25.initd
 "
 
 build() {
@@ -34,6 +35,7 @@ package() {
 		"$pkgdir"/boot/boot.scr
 	install -D -m644 "$srcdir"/hwtest.ini \
 		"$pkgdir"/usr/share/hwtest.ini
+	install -Dm755 "$srcdir"/eg25.initd "$pkgdir"/etc/init.d/eg25
 }
 
 x11() {
@@ -63,4 +65,5 @@ sha512sums="5695150bcd2d2593bb912d5e714a48f5e0e97eb27829c6b5620a6d7fc6baaa2dc32b
 f577807fc5b62637ea550f4bfe3b9d95a043250722da5db791a40e62908b3364fad8963244a0b9c6d5b30c87d75d43aeb4fd5eb65a3927324b75cf46563c2bb6  uboot-script.cmd
 c4c57d1627dd451213e1ef20d89de9266cd4edcc2d33a69aa9a1f13e16d9f9742036b69dc149fd910d7213f7525c41eb79576d4457bc85cc96eba0d986382d27  weston.ini
 f86ef35730b89bcc8160c08db7a7fcd0970adf60c0b77af68bac397de49c0d1783e6b8db1762380c9bf874aff2d030c6f44ecb75c803d69e79ede11376409369  xorg.conf
-3dd6d612c381cb0002049d1974d8fb5aa5a53a1eb4d6bcbf62eb2ad52cfdc45f0f6ad24a699716d3513b0371aa1316f25dc72afc10d7176cc3b99d0965c3f030  hwtest.ini"
+3dd6d612c381cb0002049d1974d8fb5aa5a53a1eb4d6bcbf62eb2ad52cfdc45f0f6ad24a699716d3513b0371aa1316f25dc72afc10d7176cc3b99d0965c3f030  hwtest.ini
+5a1a9c774253e8211cc54f4b3961c4bdc35427726d037b0ecad099915e856590e8267a4a47943ab753772d57261eef89924b407b305b1099a9c4ecd7b5f00b35  eg25.initd"
