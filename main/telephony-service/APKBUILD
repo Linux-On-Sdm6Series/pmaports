@@ -1,0 +1,35 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: Bart Ribbers <bribbers@disroot.org>
+pkgname="telephony-service"
+pkgver="0_git20190201"
+pkgrel=0
+_commit="8f708a4a3e2e7cb256dc27384759a3a56add6f9c"
+pkgdesc="<insert something descriptive here, suggestions wanted>"
+url="https://github.com/ubports/telephony-service"
+arch="all"
+license="GPL-3.0-only"
+makedepends="cmake qt5-qtbase-dev qt5-qtmultimedia-dev libphonenumber-dev telepathy-qt-dev libnotify-dev telepathy-farstream-dev"
+subpackages="$pkgname-dev $pkgname-doc $pkgname-lang"
+source="$pkgname-$_commit.tar.gz::https://github.com/ubports/telephony-service/archive/$_commit.tar.gz
+	make-app-stuff-optional.patch"
+builddir="$srcdir/$pkgname-$_commit"
+
+build() {
+	cmake \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+
+	make
+}
+
+check() {
+	CTEST_OUTPUT_ON_FAILURE=TRUE ctest
+}
+
+package() {
+	DESTDIR="$pkgdir" make install
+}
+
+sha512sums="876aae249e8a562c13fb839f12dea0ae93d04e5f541db32cefe422685c1e1373ebd80488c2c37baea7503f741665b514139554f254b30dec295f5048622ef487  telephony-service-8f708a4a3e2e7cb256dc27384759a3a56add6f9c.tar.gz
+d78afa71e4a77db425e0438ebe95ecb417db540024814393a7b2a4f0f0019af7cae003f4b1c7e8658d8310e96c31f15415890c1e61fc655f1a9d53db5212c0ad  make-app-stuff-optional.patch"
