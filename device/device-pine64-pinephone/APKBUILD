@@ -11,7 +11,7 @@ options="!check !archcheck"
 subpackages="
 	$pkgname-nonfree-firmware:nonfree_firmware
 "
-depends="postmarketos-base u-boot-pine64 uboot-tools mesa-git-dri-gallium linux-postmarketos-allwinner ofono ofono-openrc"
+depends="postmarketos-base u-boot-pine64 uboot-tools mesa-git-dri-gallium linux-postmarketos-allwinner ofono ofono-openrc gpsd atinout"
 makedepends="devicepkg-dev"
 install="$pkgname.post-install"
 source="
@@ -19,6 +19,9 @@ source="
 	uboot-script.cmd
 	weston.ini
 	hwtest.ini
+	gpsd_pinephone.initd
+	gpsd_device-hook.sh
+	90-modem-eg25.rules
 	ucm/sun50i-a64-audio.conf
 	ucm/HiFi
 	eg25.initd
@@ -35,6 +38,14 @@ package() {
 		"$pkgdir"/boot/boot.scr
 	install -D -m644 "$srcdir"/hwtest.ini \
 		"$pkgdir"/usr/share/hwtest.ini
+
+	# GPS
+	install -D -m755 "$srcdir"/gpsd_pinephone.initd \
+		"$pkgdir"/etc/init.d/gpsd_pinephone
+	install -D -m755 "$srcdir"/gpsd_device-hook.sh \
+		"$pkgdir"/etc/gpsd/device-hook
+	install -D -m644 "$srcdir"/90-modem-eg25.rules \
+		"$pkgdir"/usr/lib/udev/rules.d/90-modem-eg25.rules
 
 	# Alsa usecase manager config
 	install -D -m644 "$srcdir"/sun50i-a64-audio.conf \
@@ -55,6 +66,9 @@ sha512sums="bfb39f14c5a0b928d08cbcb5d19e63e141b052ebb72186c7c26f54d89c2ebf069674
 35a5ce7c18747e4363c6b310a1c33143f333a9dd2031d619dee10773d499329487a5ed76749e182d56829d03511266a54890cfa706ba21565e9ba8ffdb88f872  uboot-script.cmd
 c4c57d1627dd451213e1ef20d89de9266cd4edcc2d33a69aa9a1f13e16d9f9742036b69dc149fd910d7213f7525c41eb79576d4457bc85cc96eba0d986382d27  weston.ini
 3dd6d612c381cb0002049d1974d8fb5aa5a53a1eb4d6bcbf62eb2ad52cfdc45f0f6ad24a699716d3513b0371aa1316f25dc72afc10d7176cc3b99d0965c3f030  hwtest.ini
+1017fc3f325227da58c77abdc59e9735288d91a7ccc63ec784fe0241c523786b617a11ce8045dab2a74ca12a7dd70aaa334af91836418db1e96a3266fecaa4fd  gpsd_pinephone.initd
+ccbc83b84b5028bc2c8e526759004ce71b50b2675ecffee98f5676c70a3332197a231ff9d2fd46444dd3c0a637ec08ce6125b18240fe6bfc13f624a15192e648  gpsd_device-hook.sh
+aa0b7191548e89ddfc6cf5b1f637c7ee7ab4c2025cbfc6328e7e482e5b179ea072779ca332a18094e3d424708b923c2334210591fc369831426992f540c07abc  90-modem-eg25.rules
 775b7f7612102fc8ff12b2ffc8a7d479bfcf0ab054e331e4bd7873264cc63cbcbf5073d8dc2a80ef0f36226ad5c8b435396801c7d712161ff80ef036ecdc29b6  sun50i-a64-audio.conf
 7bd02e01dd4747b2196c4d622ec55df29863113615430422b4869d9d90eceedeb98a0b8d37449a83e01756680289a89b7d3b4092c7d3cd54355b3bc7a60fc9a0  HiFi
 5a1a9c774253e8211cc54f4b3961c4bdc35427726d037b0ecad099915e856590e8267a4a47943ab753772d57261eef89924b407b305b1099a9c4ecd7b5f00b35  eg25.initd"
