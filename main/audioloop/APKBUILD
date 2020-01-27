@@ -1,0 +1,27 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: Bart Ribbers <bribbers@disroot.org>
+pkgname=audioloop
+pkgver=0_git20200127
+pkgrel=0
+_commit="23f018b2c1b6000489c9ab1f6b69d5c022d7716f"
+pkgdesc="A simple daemon which enables/disables loopback as call is initiated on Pinephone"
+url="https://invent.kde.org/bshah/audioloop"
+arch="all"
+license="GPL-3.0-or-later"
+makedepends="extra-cmake-modules qt5-qtbase-dev pulseaudio-dev glib-dev libqofono-dev"
+source="$pkgname-$_commit.tar.gz::https://invent.kde.org/bshah/audioloop/-/archive/$_commit.tar.gz"
+options="!check" # No tests
+builddir="$srcdir/$pkgname-$_commit"
+
+build() {
+	cmake -B "$builddir"/build \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr
+	make -C build
+}
+
+package() {
+	DESTDIR="$pkgdir" make -C build install
+}
+
+sha512sums="489c30d5087b36dc86d56d7a02cd28c723d68418e837c265a86f6053fd79907cd73674bf05464d567f54f12bead3796885c8052130c9b7c11a0e649158683494  audioloop-23f018b2c1b6000489c9ab1f6b69d5c022d7716f.tar.gz"
