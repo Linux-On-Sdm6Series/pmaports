@@ -8,3 +8,9 @@ rc-update add eg25 default
 rc-update add ofono-auto-enable default
 rc-update add gpsd default
 rc-update add gpsd_pinephone default
+
+pa_sink='set-default-sink alsa_output.platform-sound.HiFi__hw_sun50ia64audio_0__sink'
+pa_source='set-default-source alsa_input.platform-sound.HiFi__hw_sun50ia64audio_0__source'
+
+grep -qxF "$pa_sink" /etc/pulse/default.pa || echo "$pa_sink" >> /etc/pulse/default.pa
+grep -qxF "$pa_source" /etc/pulse/default.pa || echo "$pa_source" >> /etc/pulse/default.pa
