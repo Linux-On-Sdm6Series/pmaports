@@ -1,0 +1,341 @@
+diff --git a/src/touch/qml/FileOpen.qml b/src/touch/qml/FileOpen.qml
+index 8846292..b06f512 100644
+--- a/src/touch/qml/FileOpen.qml
++++ b/src/touch/qml/FileOpen.qml
+@@ -24,7 +24,7 @@
+  * OTHER DEALINGS IN THE SOFTWARE.
+  */
+ 
+-import QtQuick 2.10
++import QtQuick 2.12
+ import QtQuick.Controls 2.0 as Controls
+ import QtQuick.Layouts 1.2
+ import org.kde.kirigami 2.4 as Kirigami
+@@ -46,39 +46,50 @@ ListView {
+             }
+         }
+         id: search
+-        placeholderText: "Search..."
++        placeholderText: qsTr("Search...")
+         onTextChanged: dirmodel.filter = text
+         width: listView.width
+-        Rectangle {
+-            anchors.fill: parent
+-            z: -1
+-            color: Kirigami.Theme.backgroundColor
+-        }
++        leftPadding: Kirigami.Units.largeSpacing
++
+         Row {
+-            spacing: 20
+             anchors.right: parent.right
+             anchors.verticalCenter: parent.verticalCenter
+             height: parent.height
+-            Kirigami.Icon{
++            rightPadding: contextDrawer.dragMargin
++            Item {
+                 anchors.verticalCenter: parent.verticalCenter
+-                source: "edit-clear"
+-                height: parent.height / 2
++                height: parent.height
+                 width: height
+-                MouseArea {
+-                    anchors.fill: parent
+-                    onClicked: {
++
++                Kirigami.Icon {
++                    anchors.centerIn: parent
++                    source: "edit-clear"
++                    height: parent.height / 2
++                    width: height
++                    smooth: true
++                }
++                TapHandler {
++                    onTapped: {
+                         search.text = ""
+                     }
+                 }
+             }
+-            Kirigami.Icon {
++            Item {
+                 anchors.verticalCenter: parent.verticalCenter
+-                source: "go-parent-folder"
+-                height: parent.height / 2
++                height: parent.height
+                 width: height
+-                MouseArea {
+-                    anchors.fill: parent
+-                    onClicked: dirmodel.cdUp()
++
++                Kirigami.Icon {
++                    anchors.centerIn: parent
++                    source: "go-parent-folder"
++                    height: parent.height / 2
++                    width: height
++                    smooth: true
++                }
++                TapHandler {
++                    onTapped: {
++                        dirmodel.cdUp()
++                    }
+                 }
+             }
+         }
+@@ -86,35 +97,46 @@ ListView {
+     }
+     headerPositioning: ListView.PullBackHeader
+     currentIndex: -1
++
+     delegate: Kirigami.BasicListItem {
+-            label: display
+-            icon: model.icon
+-            highlighted: focus && ListView.isCurrentItem
+-            onClicked: {
+-                if(ListView.isCurrentItem) {
+-                    if (type === "folder") {
+-                        dirmodel.cd(display)
+-                    } else {
+-                        selected(fullpath)
+-                    }
++        label: display
++        icon: model.icon
++        highlighted: focus && ListView.isCurrentItem
++        onClicked: {
++            if(ListView.isCurrentItem) {
++                if (type === "folder") {
++                    dirmodel.cd(display)
+                 } else {
+-                    currentIndex = index;
++                    selected(fullpath)
+                 }
++            } else {
++                currentIndex = index;
+             }
+-            Rectangle {
+-                width: height
+-                height: parent.height * 3
+-                radius: height / 2
+-                color: Kirigami.Theme.backgroundColor
+-                Kirigami.Icon {
+-                    source: type === "folder" ? "folder-open" : "document-open"
+-                    anchors.fill: parent
+-                    anchors.margins: parent.height / 6
+-                    MouseArea {
+-                        anchors.fill: parent
+-                        onClicked: selected(fullpath)
+-                    }
+-                }
++        }
++        Rectangle {
++            width: height
++            height: parent.height * 3
++            radius: height / 2
++            color: Kirigami.Theme.backgroundColor
++
++            Kirigami.Icon {
++                source: type === "folder" ? "folder-open" : "document-open"
++                anchors.fill: parent
++                anchors.margins: parent.height / 6
++            }
++            MouseArea {
++                anchors.fill: parent
++                onClicked: selected(fullpath)
+             }
+         }
++    }
++
++    Controls.Label {
++        anchors.fill: parent
++        horizontalAlignment: Qt.AlignHCenter
++        verticalAlignment: Qt.AlignVCenter
++        visible: parent.count == 0
++        text: qsTr("Nothing to show")
++        opacity: 0.6
++    }
+ }
+diff --git a/src/touch/qml/Help.qml b/src/touch/qml/Help.qml
+index 5122055..23a74f2 100644
+--- a/src/touch/qml/Help.qml
++++ b/src/touch/qml/Help.qml
+@@ -23,5 +23,5 @@
+  * OTHER DEALINGS IN THE SOFTWARE.
+  */
+ Recipe {
+-    title: "Help"
++    title: qsTr("Help")
+ }
+diff --git a/src/touch/qml/MainPage.qml b/src/touch/qml/MainPage.qml
+index e337eec..e357c75 100644
+--- a/src/touch/qml/MainPage.qml
++++ b/src/touch/qml/MainPage.qml
+@@ -23,7 +23,7 @@
+  * OTHER DEALINGS IN THE SOFTWARE.
+  */
+ 
+-import QtQuick 2.4
++import QtQuick 2.12
+ import QtQuick.Controls 2.0 as Controls
+ import QtQuick.Layouts 1.2
+ import org.kde.kirigami 2.4 as Kirigami
+@@ -34,28 +34,30 @@ Kirigami.ScrollablePage {
+ 
+     title: "Kookbook"
+ 
+-
+-    ListView{
++    ListView {
+         id: listView
+-        header:     Controls.TextField {
++        header: Controls.TextField {
+             id: search
+-            placeholderText: "Search..."
++            placeholderText: qsTr("Search...")
+             onTextChanged: scanner.filter = text
+             width: listView.width
+-            Rectangle {
+-                anchors.fill: parent
+-                z: -1
+-                color: Kirigami.Theme.backgroundColor
+-            }
+-            Kirigami.Icon{
+-                source: "edit-clear"
+-                height: parent.height / 2
+-                width: height
++            leftPadding: Kirigami.Units.largeSpacing
++
++            Item {
+                 anchors.right: parent.right
+                 anchors.verticalCenter: parent.verticalCenter
+-                MouseArea {
+-                    anchors.fill: parent
+-                    onClicked: {
++                height: parent.height
++                width: height
++
++                Kirigami.Icon {
++                    anchors.centerIn: parent
++                    source: "edit-clear"
++                    height: parent.height / 2
++                    width: height
++                    smooth: true
++                }
++                TapHandler {
++                    onTapped: {
+                         search.text = ""
+                     }
+                 }
+@@ -67,6 +69,7 @@ Kirigami.ScrollablePage {
+         anchors.fill: parent
+         model: scanner.titleList
+         currentIndex: -1
++
+         delegate: Kirigami.BasicListItem {
+             reserveSpaceForIcon: false
+             label: display
+@@ -77,6 +80,14 @@ Kirigami.ScrollablePage {
+             }
+             highlighted: focus && ListView.isCurrentItem
+         }
+-    }
+ 
++        Controls.Label {
++            anchors.fill: parent
++            horizontalAlignment: Qt.AlignHCenter
++            verticalAlignment: Qt.AlignVCenter
++            visible: parent.count == 0
++            text: qsTr("Nothing to show")
++            opacity: 0.6
++        }
++    }
+ }
+diff --git a/src/touch/qml/Recipe.qml b/src/touch/qml/Recipe.qml
+index b2cf122..41879dc 100644
+--- a/src/touch/qml/Recipe.qml
++++ b/src/touch/qml/Recipe.qml
+@@ -31,7 +31,7 @@ import Kookbook 1.0
+ 
+ 
+ Kirigami.ScrollablePage {
+-    title: "Recipe"
++    title: qsTr("Recipe")
+     property alias path: loader.path
+     DocumentLoader {
+         id: loader
+diff --git a/src/touch/qml/SelectFolder.qml b/src/touch/qml/SelectFolder.qml
+index 7ddaed7..00d74bf 100644
+--- a/src/touch/qml/SelectFolder.qml
++++ b/src/touch/qml/SelectFolder.qml
+@@ -36,7 +36,7 @@ Kirigami.ScrollablePage {
+     contextualActions: [
+         Kirigami.Action {
+             id: showHidden
+-            text: "Show hidden folders"
++            text: qsTr("Show hidden folders")
+             checkable: true
+             checked: false
+         }
+diff --git a/src/touch/qml/main.qml b/src/touch/qml/main.qml
+index f9ae8de..fde5d9c 100644
+--- a/src/touch/qml/main.qml
++++ b/src/touch/qml/main.qml
+@@ -39,7 +39,6 @@ Kirigami.ApplicationWindow {
+     width: 480
+     height: 640
+     title: "Kookbook"
+-    header: Kirigami.ApplicationHeader {}
+     contextDrawer: Kirigami.ContextDrawer {
+         id: contextDrawer
+     }
+@@ -49,36 +48,42 @@ Kirigami.ApplicationWindow {
+         titleIcon: ":/appicon.svg"
+         actions: [
+             Kirigami.Action {
+-                text: "Refresh"
++                text: qsTr("Refresh")
+                 iconName: "view-refresh"
+                 onTriggered: {
+                     scanner.refresh()
+-                    showPassiveNotification("Refreshing")
++                    showPassiveNotification(qsTr("Refreshing"))
+                 }
+             },
+             Kirigami.Action {
+-                text: "Open cookbook"
++                text: qsTr("Open cookbook")
+                 iconName: "document-open-folder"
+                 onTriggered: {
+-                    root.pageStack.pop(null)
++                    if (root.pageStack.depth > 1) {
++                        root.pageStack.pop(null)
++                    }
+                     var newItem = root.pageStack.push(Qt.resolvedUrl("SelectFolder.qml"))
+                     newItem.selected.connect(function (path) {
+                         scanner.rootPath = path
+-                        root.pageStack.pop(null)
+-                        showPassiveNotification("Scanning")
+-                        })
++                        if (root.pageStack.depth > 1) {
++                            root.pageStack.pop(null)
++                        }
++                        showPassiveNotification(qsTr("Scanning"))
++                    })
+                 }
+ 
+             },
+             Kirigami.Action {
+-                text: "Home"
++                text: qsTr("Home")
+                 iconName: "go-home"
+                 onTriggered: {
+-                    root.pageStack.pop(null)
++                    if (root.pageStack.depth > 1) {
++                        root.pageStack.pop(null)
++                    }
+                 }
+             },
+             Kirigami.Action {
+-                text: "Help"
++                text: qsTr("Help")
+                 iconName: "help-contents"
+                 onTriggered: root.pageStack.push(Qt.resolvedUrl("Help.qml"))
+             }
