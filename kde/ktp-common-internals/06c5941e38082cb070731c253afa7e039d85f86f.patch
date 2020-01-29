@@ -1,0 +1,24 @@
+From 06c5941e38082cb070731c253afa7e039d85f86f Mon Sep 17 00:00:00 2001
+From: Alexander Akulich <akulichalexander@gmail.com>
+Date: Wed, 29 Jan 2020 02:04:24 +0300
+Subject: [PATCH] Conversation: Fix a crash in destructor
+
+---
+ KTp/Declarative/conversation.cpp | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/KTp/Declarative/conversation.cpp b/KTp/Declarative/conversation.cpp
+index a6be0e9e..3f4e2402 100644
+--- a/KTp/Declarative/conversation.cpp
++++ b/KTp/Declarative/conversation.cpp
+@@ -288,7 +288,9 @@ Conversation::~Conversation()
+ {
+     qCDebug(KTP_DECLARATIVE);
+     //if we are not handling the channel do nothing.
+-    if (!d->delegated) {
++    // d->messages is valid here (destroyed in a deeper base class destructor)
++    // but the textChannel actually can be invalid.
++    if (!d->delegated && !d->messages->textChannel().isNull()) {
+         d->messages->textChannel()->requestClose();
+     }
+     delete d;

@@ -1,0 +1,21 @@
+From 82026dcf9dd73f12ffede8228a3aa7809dd93f84 Mon Sep 17 00:00:00 2001
+From: Alexander Akulich <akulichalexander@gmail.com>
+Date: Mon, 20 Jan 2020 00:07:33 +0300
+Subject: [PATCH] MainLogModel: Fix a crash if can't get account on start chat
+
+---
+ KTp/Declarative/mainlogmodel.cpp | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/KTp/Declarative/mainlogmodel.cpp b/KTp/Declarative/mainlogmodel.cpp
+index 887de179..fe002d66 100644
+--- a/KTp/Declarative/mainlogmodel.cpp
++++ b/KTp/Declarative/mainlogmodel.cpp
+@@ -258,6 +258,7 @@ void MainLogModel::startChat(const QString &accountId, const QString &contactId)
+ 
+     if (account.isNull()) {
+         qWarning() << "Cannot get account for" << accountId;
++        return;
+     }
+ 
+     if (m_conversations.contains(accountId + contactId)) {
