@@ -1,0 +1,20 @@
+# Contributor:
+# Maintainer:
+pkgname="pinephone-screen-off"
+pkgver=0_git20200125
+_commit="771b849c9e771abb72012cc4b71dfe5394a6a73e"
+pkgrel=0
+pkgdesc="asd"
+url="asd"
+arch="noarch"
+license="asd"
+depends="py3-libevdev py3-pydbus"
+source="https://github.com/z3ntu/pinephone-screen-off/archive/$_commit.tar.gz"
+builddir="$srcdir/pinephone-screen-off-$_commit"
+
+package() {
+	install -Dm755 ppso.py "$pkgdir"/usr/bin/ppso
+	install -Dm644 ppso.desktop "$pkgdir"/usr/share/applications/ppso.desktop
+}
+
+sha512sums="db58579673346ed2470e507dd8df826843b24ba8c2905d6e1548750156137da96aa6b2791d97f9c4bfdfa21869e09ef6fd48bb67f80215086358c589618c10f5  771b849c9e771abb72012cc4b71dfe5394a6a73e.tar.gz"
