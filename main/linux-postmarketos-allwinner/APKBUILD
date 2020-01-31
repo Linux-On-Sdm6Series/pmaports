@@ -3,7 +3,7 @@ _config="config-${_flavor}.${CARCH}"
 
 pkgname=linux-${_flavor}
 
-pkgver=5.4.0_git20200128
+pkgver=5.5.0_git202001229
 pkgrel=0
 
 arch="aarch64"
@@ -11,14 +11,13 @@ pkgdesc="Kernel fork with PinePhone Don't be evil patches"
 url="https://gitlab.com/pine64-org/linux/"
 makedepends="devicepkg-dev perl sed installkernel bash gmp-dev bc linux-headers elfutils-dev openssl-dev file bison flex rsync"
 options="!strip !check !tracedeps"
-_commit="faa752346660e0f6009336ec7c87c1605f776411"
+_commit="5cfa84eaf52edf64dcd82c60b0a7b44c027228a0"
 _commit_rtl8723cs="1c9c0cb9d335626a66d8063399c6e16751ecc1a8"
 source="
-	${pkgname}-${_commit}.tar.gz::https://gitlab.com/pine64-org/linux/-/archive/${_commit}/linux-${_commit}.tar.gz
+	${pkgname}-${_commit}.tar.gz::https://github.com/smaeul/linux/archive/$_commit.tar.gz
 	rtl8723cs-${_commit_rtl8723cs}.tar.gz::https://github.com/Icenowy/rtl8723cs/archive/${_commit_rtl8723cs}.tar.gz
 	config-${_flavor}.aarch64
-	touch-dts.patch
-	rtl8723cs.patch
+	more-hacks.patch
 "
 
 subpackages="$pkgname-dev"
@@ -97,8 +96,7 @@ dev() {
 		ARCH="$_carch" \
 		INSTALL_HDR_PATH="$subpkgdir"/usr
 }
-sha512sums="2620d5b4a07fc2cf0a8ff2b106fb64948e01a2f14e6fbf0597a20238bcc78b6e01d1540a607e2b86cd903651a0d5db1efbfa357cac02486883db2eccacc96b90  linux-postmarketos-allwinner-faa752346660e0f6009336ec7c87c1605f776411.tar.gz
+sha512sums="a2a04c576233180d9c8711a5c4c704fd8d099a59af5cd70b24b70e45efecbd17deb780cdd298b3707804c4b5966047cc87c56d0844eec64175e1da511ee8c3e3  linux-postmarketos-allwinner-5cfa84eaf52edf64dcd82c60b0a7b44c027228a0.tar.gz
 e4e585ce787301eeee07ff8e45a97343456808a47ed237053f0c83a49b4958a75514def4c5263f4507a282ea90bd2bb3f8f468839f7e5fd05ae947a796c8c6b9  rtl8723cs-1c9c0cb9d335626a66d8063399c6e16751ecc1a8.tar.gz
-e759b7a5828fe0eca7d220e1667c0812b28467cab1ac422963615da82c77ddd8eec252219e4cf424d3bd90c73decb7a22a06021420d22a122839cb79f51d2e93  config-postmarketos-allwinner.aarch64
-6c12f3badc7239ab62116daa4a19977632b6c157a4d10cb083776998b4481f61e0186a3623acd3026e9ff2a68842b4cdd434ca825fbb546a723bb1f01e5bd5e4  touch-dts.patch
-bf06f931fb543f4bf2f0567902c3021de237fc9684f92af2ed3e956f869d907c9cff1cf3e11a72eb97bda47c8f8b28aff226634f641bdffa04b08d434f419faa  rtl8723cs.patch"
+ce4b26293e8c5a306121d6ada01242adc1e3ae776348a442224b342010bb2295117d02d5558eb60089b86c2ad2e8c10d365e72bdd515cf3e876c96f3376edf49  config-postmarketos-allwinner.aarch64
+f882691c228d9759f76bb2293988e92a705b01682f3ae8b9115568d59fcfc9253a1da8228c348a5cfc65c5d8762d7d182994fff591def3d6c1122b3899a09756  more-hacks.patch"

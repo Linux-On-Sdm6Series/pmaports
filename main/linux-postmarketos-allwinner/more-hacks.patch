@@ -1,0 +1,10 @@
+diff --git a/arch/arm64/boot/dts/allwinner/sun50i-a64-pinephone.dts b/arch/arm64/boot/dts/allwinner/sun50i-a64-pinephone.dts
+index f6ae9d63e3b4..265e736c5d1d 100644
+--- a/arch/arm64/boot/dts/allwinner/sun50i-a64-pinephone.dts
++++ b/arch/arm64/boot/dts/allwinner/sun50i-a64-pinephone.dts
+@@ -660,4 +660,5 @@ &usb_power_supply {
+ 
+ &usbphy {
+ 	status = "okay";
++	usb1_vbus-supply = <&reg_vbat_bb>;
+ };
