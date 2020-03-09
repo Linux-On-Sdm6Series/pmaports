@@ -15,12 +15,12 @@ if [ -z "$builddir" ] || [ -z "$pkgdir" ] || [ -z "$_carch" ] ||
 fi
 
 # kernel.release
-install -D "$builddir/include/config/kernel.release" \
+install -D "$builddir/out/include/config/kernel.release" \
 	"$pkgdir/usr/share/kernel/$_flavor/kernel.release"
 
 # zImage (find the right one)
 # shellcheck disable=SC2164
-cd "$builddir/arch/$_carch/boot"
+cd "$builddir/out/arch/$_carch/boot"
 _target="$pkgdir/boot/vmlinuz-$_flavor"
 for _zimg in zImage-dtb Image.gz-dtb *zImage Image; do
 	[ -e "$_zimg" ] || continue

@@ -52,6 +52,7 @@ for i in $makefiles; do
 done
 
 # Prepare kernel config ('yes ""' for kernels lacking olddefconfig)
-cp "$srcdir/$_config" "$builddir"/.config
+mkdir "$builddir"/out
+cp "$srcdir/$_config" "$builddir"/out/.config
 # shellcheck disable=SC2086
-yes "" | make -C "$builddir" ARCH="$_carch" $HOSTCC oldconfig
+yes "" | make -C "$builddir" O="$builddir"/out ARCH="$_carch" $HOSTCC oldconfig

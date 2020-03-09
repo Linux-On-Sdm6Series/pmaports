@@ -43,18 +43,18 @@ prepare() {
 
 build() {
 	unset LDFLAGS
-	make ARCH="$_carch" CC="${CC:-gcc}" \
+	make O="$builddir"/out ARCH="$_carch" CC="${CC:-gcc}" \
 		KBUILD_BUILD_VERSION="$((pkgrel + 1 ))-postmarketOS"
 
 	# Generate master DTB (deviceinfo_bootimg_qcdt)
-	dtbTool -s 2048 -p "scripts/dtc/" -o "arch/arm/boot/dt.img" "arch/arm/boot/"
+	dtbTool -s 2048 -p "scripts/dtc/" -o "out/arch/arm/boot/dt.img" "out/arch/arm/boot/"
 }
 
 package() {
 	downstreamkernel_package "$builddir" "$pkgdir" "$_carch" "$_flavor"
 
 	# Master DTB (deviceinfo_bootimg_qcdt)
-	install -Dm644 "$builddir/arch/arm/boot/dt.img" \
+	install -Dm644 "$builddir/out/arch/arm/boot/dt.img" \
 		"$pkgdir/boot/dt.img"
 }
 
