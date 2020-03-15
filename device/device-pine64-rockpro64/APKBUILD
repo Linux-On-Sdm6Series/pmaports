@@ -1,6 +1,6 @@
 # Reference: <https://postmarketos.org/devicepkg>
-pkgname="device-pine64-pinebookpro"
-pkgdesc="PINE64 Pinebook Pro"
+pkgname="device-pine64-rockpro64"
+pkgdesc="PINE64 RockPro64"
 pkgver=0.1
 pkgrel=0
 url="https://postmarketos.org"
@@ -10,11 +10,9 @@ options="!check !archcheck"
 depends="postmarketos-base linux-postmarketos-rockchip u-boot-rockpro64 mesa-git-dri-gallium"
 makedepends="devicepkg-dev"
 subpackages="$pkgname-nonfree-firmware:nonfree_firmware"
-install="$pkgname.post-install"
 source="
 	deviceinfo
 	extlinux.conf
-	10-usb-kbd.hwdb
 "
 
 build() {
@@ -25,8 +23,6 @@ package() {
 	devicepkg_package $startdir $pkgname
 	install -D -m644 "$srcdir"/extlinux.conf \
 		"$pkgdir"/boot/extlinux/extlinux.conf
-	install -D -m644 "$srcdir"/10-usb-kbd.hwdb \
-		"$pkgdir"/etc/udev/hwdb.d/10-usb-kbd.hwdb
 }
 
 nonfree_firmware() {
@@ -35,6 +31,5 @@ nonfree_firmware() {
 	mkdir "$subpkgdir"
 }
 
-sha512sums="361776bfd0d6f532f661291d40fdefafd14c1a872ee33222449a432d6c8842aad43bc526965a2e6d889caeed9aa3ff17bcdffd5d4e0aaf564390da4c69b7eed9  deviceinfo
-cc9f2f09e70fd92aa940578ae20d06ccad613306f6d696a85b3628d2e154600401fd894385454f2fb67347d6464a64f7fe504ee0e426123644487a268b0931f8  extlinux.conf
-13a53bd00dd0afb8908b0bc98d388d5f37ab1df334a3ff0f56928f0f4e4e658253c78f2c368e31979cf8b4ebcc519d0efe0e2255979c00198b82a8eb37d93dd0  10-usb-kbd.hwdb"
+sha512sums="47536aca481fe1d166cecbd1292036ea11714ebdea400fa1306282149e8affc694cafb4483515feb60772f9da341d3e81745ae093f8a630eb07be9cdbea27fbd  deviceinfo
+bd974f4f2b27b868bd63d0134c3e4c062a786be781d2585f42326cfb135211cb038be8d769ec178b94cfe860290d2e502e5eb88ff077ea04b808980237cf624c  extlinux.conf"
