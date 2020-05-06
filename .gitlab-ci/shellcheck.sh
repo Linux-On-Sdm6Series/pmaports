@@ -25,6 +25,8 @@ sh_files="
 	./main/postmarketos-update-kernel/update-kernel.sh
 	./main/mdss-fb-init-hack/mdss-fb-init-hack.sh
 
+	./hybris/lxc-android-9/lxc/mount-android.sh
+
 	$(find . -path './main/postmarketos-ui-*/*.sh')
 	$(find . -path './main/postmarketos-ui-*/*.pre-install')
 	$(find . -path './main/postmarketos-ui-*/*.post-install')
